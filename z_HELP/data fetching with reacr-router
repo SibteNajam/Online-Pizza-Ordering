@@ -1,0 +1,18 @@
+Router v6.4+, it introduced data loaders for data fetching tied to routes.
+Loaders provide an easy way to fetch data before rendering the route components.
+Fetch-on-navigation, meaning the data is fetched when the user navigates to a new route.
+Simple for route-driven components where data is mostly static or fetched once per navigation.
+
+
+RTK Query is better suited for:
+
+Complex applications where state is shared across multiple components.
+Scenarios where caching, invalidation, or background data synchronization (e.g., polling) is needed.
+If you're already using Redux for state management, RTK Query fits seamlessly.
+React Router (with loaders) is better suited for:
+
+Simpler applications where data is primarily tied to route changes and doesn’t need to be globally available.
+If you prefer to avoid setting up Redux and want data to be fetched specifically when navigating to a new route.
+
+If you need global state management, caching, and fine control over your API requests, go with RTK Query.
+If your data is tightly coupled with routes and navigation, and your app is simpler, then React Router loaders might be the better choice.

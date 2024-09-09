@@ -1,1 +1,2 @@
 npm install --save-dev husky
+npm install react-router-dom --legacy-peer-deps
