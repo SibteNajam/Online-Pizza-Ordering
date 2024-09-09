@@ -12,5 +12,5 @@ export const childRoutes = [
   { path: "/menu", element: <Menu /> },
   { path: "/cart", element: <Cart /> },
   { path: "/order/:orderID", element: <Order /> },
-  { path: "/order/add-new", element: <CreateOrder /> },
+  { path: "/order/add", element: <CreateOrder /> },
 ];
