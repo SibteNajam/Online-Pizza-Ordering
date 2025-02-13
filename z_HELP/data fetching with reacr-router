@@ -3,7 +3,6 @@ Loaders provide an easy way to fetch data before rendering the route components.
 Fetch-on-navigation, meaning the data is fetched when the user navigates to a new route.
 Simple for route-driven components where data is mostly static or fetched once per navigation.
 
-
 RTK Query is better suited for:
 
 Complex applications where state is shared across multiple components.
@@ -16,3 +15,5 @@ If you prefer to avoid setting up Redux and want data to be fetched specifically
 
 If you need global state management, caching, and fine control over your API requests, go with RTK Query.
 If your data is tightly coupled with routes and navigation, and your app is simpler, then React Router loaders might be the better choice.
+
+Loader function used read data while action (react router actions) functions used to write data or mutate data to the state that sotred on some server.

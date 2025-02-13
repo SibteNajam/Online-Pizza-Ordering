@@ -1,5 +1,7 @@
 // import { useState } from "react";
 
+import { Form, redirect } from "react-router-dom";
+
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
@@ -39,7 +41,8 @@ function CreateOrder() {
     <div>
       <h2>{"Ready to order? Let's go!"}</h2>
 
-      <form>
+      {/* <Form method="POST" action="/order/add "> */}
+      <Form method="POST">
         <div>
           <label>First Name</label>
           <input type="text" name="customer" required />
@@ -71,11 +74,39 @@ function CreateOrder() {
         </div>
 
         <div>
+          {/* here i add cart as an input or as form elemenet but its not on ui for now thats why its hidden */}
+          <input type="hidden" name="cart" value={JSON.stringify(cart)} />
           <button>Order now</button>
         </div>
-      </form>
+      </Form>
     </div>
   );
+}
+// to connect thsi action function we modify where we we define routes
+export async function action({ request }) {
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
+  console.log(data);
+  // creating order by setting cart string to object
+  const order = {
+    ...data,
+    cart: JSON.parse(data.cart),
+    priority: data.priority === "on",
+  };
+  console.log("order", order);
+
+  // now we  can pass this data to api end point
+  const newOrder = await CreateOrder(order);
+  // after creting order we want use to move to URL /order/id to show order but we
+  // cannot use navigate from useNavigate  we cannot use hook in this function
+  //  hooks called in component only
+  console.log("neworder", newOrder);
+  // return null;
+  if (!newOrder || !newOrder.id) {
+    throw new Error("Order creation failed, ID is missing");
+  }
+
+  return redirect(`/order/${newOrder.id}`);
 }
 
 export default CreateOrder;
