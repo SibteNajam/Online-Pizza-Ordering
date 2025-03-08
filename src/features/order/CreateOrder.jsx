@@ -1,6 +1,6 @@
-// import { useState } from "react";
+import { useState } from "react";
 
-import { Form, redirect } from "react-router-dom";
+import { Form, redirect, useNavigation, useActionData } from "react-router-dom";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -33,7 +33,13 @@ const fakeCart = [
 ];
 
 function CreateOrder() {
-  // const [withPriority, setWithPriority] = useState(false);
+  const [withPriority, setWithPriority] = useState(false);
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
+  // return some errors so mostly used this hook
+  const formError = useActionData();
+
   const cart = fakeCart;
   console.log(cart);
 
@@ -53,6 +59,7 @@ function CreateOrder() {
           <div>
             <input type="tel" name="phone" required />
           </div>
+          {formError?.phone && <p>{formError.phone}</p>}
         </div>
 
         <div>
@@ -67,8 +74,8 @@ function CreateOrder() {
             type="checkbox"
             name="priority"
             id="priority"
-            // value={withPriority}
-            // onChange={(e) => setWithPriority(e.target.checked)}
+            value={withPriority}
+            onChange={(e) => setWithPriority(e.target.checked)}
           />
           <label htmlFor="priority">Want to yo give your order priority?</label>
         </div>
@@ -76,7 +83,9 @@ function CreateOrder() {
         <div>
           {/* here i add cart as an input or as form elemenet but its not on ui for now thats why its hidden */}
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <button>Order now</button>
+          <button disabled={isSubmitting}>
+            {isSubmitting ? "Placing Order..." : "Order Now"}
+          </button>
         </div>
       </Form>
     </div>
@@ -94,17 +103,20 @@ export async function action({ request }) {
     priority: data.priority === "on",
   };
   console.log("order", order);
+  const errors = {};
+  if (!isValidPhone(order.phone))
+    errors.phone =
+      "Please give correct phone nnumber.We might need to conatct you";
+  if (Object.keys(errors).length > 0) return errors;
 
   // now we  can pass this data to api end point
   const newOrder = await CreateOrder(order);
   // after creting order we want use to move to URL /order/id to show order but we
   // cannot use navigate from useNavigate  we cannot use hook in this function
   //  hooks called in component only
+
   console.log("neworder", newOrder);
   // return null;
-  if (!newOrder || !newOrder.id) {
-    throw new Error("Order creation failed, ID is missing");
-  }
 
   return redirect(`/order/${newOrder.id}`);
 }
