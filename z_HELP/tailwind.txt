@@ -1,0 +1,4 @@
+tailwind----> Utility first CSS appraoch / atomic css 
+
+settingUP tailwind
+ 

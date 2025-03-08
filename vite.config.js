@@ -1,7 +1,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 import eslint from "vite-plugin-eslint";
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), eslint()], // added eslint to configure in project
+  plugins: [react(), eslint(), tailwindcss(), ("@tailwindcss/postcss": {})], // added eslint to configure in project
 });
