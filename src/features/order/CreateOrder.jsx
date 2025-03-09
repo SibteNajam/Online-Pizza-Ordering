@@ -82,7 +82,7 @@ function CreateOrder() {
         <div>
           {/* here i add cart as an input or as form elemenet but its not on ui for now thats why its hidden */}
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <button disabled={isSubmitting}>
+          <button className="bg-yellow-400 hover:bg-yellow-300 transition-colors duration-300 uppercase font-semibold text-stone-800 py-2 px-3 inline-block tracking-wide rounded-[4px] focus:outline-none focus:ring  focus:ring-yellow-300 focus:bg-yellow-300 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-500" disabled={isSubmitting}>
             {isSubmitting ? "Placing Order..." : "Order Now"}
           </button>
         </div>
@@ -114,10 +114,10 @@ export async function action({ request }) {
   // cannot use navigate from useNavigate  we cannot use hook in this function
   //  hooks called in component only
 
-  console.log("neworder", newOrder);
-  // return null;
+  // console.log("neworder", newOrder);
+  return null;
 
-  return redirect(`/order/${newOrder.id}`);
+  // return redirect(`/order/${newOrder.id}`);
 }
 
 export default CreateOrder;

@@ -5,5 +5,5 @@ import eslint from "vite-plugin-eslint";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), eslint(), tailwindcss()], // added eslint to configure in project
+  plugins: [react(), eslint(), tailwindcss()], 
 });
