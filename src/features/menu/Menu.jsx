@@ -5,7 +5,8 @@ function Menu() {
   const menu = useLoaderData(); // this hook automatically know that data from menuLoader
   console.log({ menu });
   return (
-    <ul>
+    // this divide class placed in parent item that add some line between child elements
+    <ul className="divide-y divide-stone-200 px-2">
       {menu.map((item) => (
         <MenuItem key={item.id} pizza={item} />
       ))}

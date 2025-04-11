@@ -12,17 +12,17 @@
     "husky:add-precommit": "husky add .husky/pre-commit \"npm test\""
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.0.12",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.5.3",
+    "@formatjs/intl": "^3.1.6",
+    "@tailwindcss/vite": "^4.1.3",
+    "intl": "^1.2.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^6.26.1"
+    "react-router-dom": "^6.26.1",
+    "tailwindcss": "^4.1.3"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@eslint/js": "^9.9.0",
-    "@tailwindcss/postcss": "^4.0.12",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
@@ -36,7 +36,6 @@
     "husky": "^9.1.5",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "tailwindcss": "^4.0.12",
     "vite": "^5.4.1",
     "vite-plugin-eslint": "^1.8.1"
   }
