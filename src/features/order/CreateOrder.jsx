@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Form, redirect, useNavigation, useActionData } from "react-router-dom";
 import Button from "../../ui/Button"
+import { useSelector } from "react-redux";
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
@@ -32,6 +33,7 @@ const fakeCart = [
 ];
 
 function CreateOrder() {
+  const username = useSelector(state => state.user.username);
   const [withPriority, setWithPriority] = useState(false);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
@@ -50,7 +52,7 @@ function CreateOrder() {
       <Form method="POST">
         <div className="mb-3 flex gap-2 flex-col sm:flex-row sm:items-center">
           <label className="sm:basis-40">First Name</label>
-          <input className="input grow" type="text" name="customer"placeholder="Enter your name" required />
+          <input className="input grow" type="text" name="customer"placeholder="Enter your name" defaultValue={username} required />
         </div>
 
         <div className="mb-3 flex gap-2 flex-col sm:flex-row sm:items-start">
