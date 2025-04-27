@@ -3,7 +3,8 @@
 import { formatCurrency } from "../../utilities/helpers";
 import Button from "../../ui/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, getCart, increaseItemQuantity, decreaseItemQuantity } from "../cart/cartSlice";
+import { addItem, getCart } from "../cart/cartSlice";
+import UpdateItemQuantity from "../cart/UPdateItemQuantity";
 function MenuItem({ pizza }) {
   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
   const cart = useSelector(getCart);
@@ -20,12 +21,7 @@ function MenuItem({ pizza }) {
     };
     dispatch(addItem(newItem));
   };
-  function handleIncreaseQuantity() {
-    dispatch(increaseItemQuantity(currentItem.pizzaId));
-  };
-  function handleDecreaseQuantity() {
-    dispatch(decreaseItemQuantity(currentItem.pizzaId));
-  };
+
   return (
     <li className="flex gap-7 py-2">
       <img src={imageUrl} alt={name} className={`h-24 ${soldOut ? 'opacity-90 grayscale-80' : ''}`} />
@@ -43,17 +39,12 @@ function MenuItem({ pizza }) {
         <div className="mt-auto flex items-center justify-between">
           {!soldOut ? <p className="text-sm">{formatCurrency(unitPrice)}</p> : <p className="text-sm text-yellow-500 uppercase font-medium">Sold out</p>}
           <div className="flex items-center space-x-3">
-            {currentItem && (<div className="flex space-x-3 items-center">
-              <Button className='transition-all duration-300 ease-in-out hover:scale-110 hover:bg-yellow-400'
-                type='small' onClick={handleDecreaseQuantity}>
-                -
-              </Button>
-              <p className="text-sm">{currentItem.quantity}</p>
-              <Button className='transition-all duration-300 ease-in-out hover:scale-110 hover:bg-yellow-400'
-                type='small' onClick={handleIncreaseQuantity}>+</Button>
-            </div>)}
+            {currentItem && (
+              <UpdateItemQuantity pizza={currentItem} />
+            )}
             {!soldOut && <Button type='small' onClick={handleAddToCart} disabled={currentItem} className="transition-all duration-300 ease-in-out hover:scale-105 hover:brightness-110"
-            > Add To cart </Button>}
+            > Add To cart </Button>
+            }
           </div>
         </div>
       </div>

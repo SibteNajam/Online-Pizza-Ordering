@@ -1,0 +1,14 @@
+used slices to make different call like addi tem delete item etc
+
+
+then we add some selector functions like 
+
+getTotalQuantity 
+getitemquantity
+getcart
+
+
+then we now implement redux middleware thunk  
+use geolocation to get their location
+
+its between dispatching and reducer in between

@@ -72,9 +72,9 @@ function Order() {
         </p>
         <p className="text-xs text-stone-500">(Estimated delivery: {formatDate(estimatedDelivery)})</p>
       </div>
-<ul className="divide-y divide-stone-200 border-b border-t">
-  {cart.map((item) => (<OrderItem item={item} key={item.id}/>))}
-</ul>
+      <ul className="divide-y divide-stone-200 border-b border-t">
+        {cart.map((item) => (<OrderItem item={item} key={item.pizzaId} />))}
+      </ul>
       <div className="space-y-2 bg-stone-200 py-5 px-6">
         <p className="text-sm font-medium text-stone-600">Price pizza: {formatCurrency(orderPrice)}</p>
         {priority && <p className="text-sm font-medium text-stone-600">Price priority: {formatCurrency(priorityPrice)}</p>}
@@ -85,6 +85,7 @@ function Order() {
 }
 export async function loader({ params }) {
   const order = await getOrder(params.orderID);
+  console.log("sasasas", order);
   return order;
 }
 
