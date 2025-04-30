@@ -1,0 +1,34 @@
+
+/* Background container for the pizza image */
+.pizza-bg {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: background-image 0.5s ease-in-out;
+  z-index: 0;
+}
+
+/* Styling for the form card with a "crystal" look */
+.crystal-form {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+/* Pizza wheel animation */
+.pizza-wheel {
+  animation: spin 4s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+      transform: rotate(0deg);
+  }
+
+  100% {
+      transform: rotate(360deg);
+  }
+}
+
