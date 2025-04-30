@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { createSelector } from 'reselect';
+
 
 const initialState = {
     cart: [],
@@ -61,3 +63,12 @@ export const getCart = (state) => state.cart.cart;
 // can use tthis in menu item but for now thre used different approach tthre but doing sme thing baiscalyy
 export const selectItemQuantity = (id) => (state) =>
     state.cart.find((item) => item.pizzaId === id)?.quantity || 0;
+
+
+
+//for performance optimiztaion use create slecotr
+
+const selectCart = (state) => state.cart.cart;
+
+export const selectCartItemById = (id) =>
+    createSelector([selectCart], (cart) => cart.find((item) => item.pizzaId === id));

@@ -8,16 +8,10 @@ import CreateOrder, {
 } from "../../features/order/CreateOrder";
 import Order, { loader as orderLoader } from "../../features/order/Order";
 import Menu, { loader as menuLoader } from "../../features/menu/Menu";
-import Login from "../../auth/Login";
 
 // Define and export the child routes
 export const childRoutes = [
   { path: "/", element: <Home /> },
-  {
-    path: "/login",
-    element: <Login />,
-    errorElement: <Error />
-  },
   {
     path: "/menu",
     element: <Menu />,

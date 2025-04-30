@@ -1,68 +1,20 @@
-// /* eslint-disable no-unused-vars */
-// /* eslint-disable react/prop-types */
-// import { formatCurrency } from "../../utilities/helpers";
-// import Button from "../../ui/Button";
-// import { useDispatch, useSelector } from "react-redux";
-// import { addItem, getCart } from "../cart/cartSlice";
-// import UpdateItemQuantity from "../cart/UPdateItemQuantity";
-// function MenuItem({ pizza }) {
-//   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
-//   const cart = useSelector(getCart);
-//   const currentItem = cart.find((item) => item.pizzaId === id);
-//   const dispatch = useDispatch();
-
-//   function handleAddToCart() {
-//     const newItem = {
-//       pizzaId: id,
-//       name,
-//       quantity: 1,
-//       unitPrice,
-//       totalPrice: unitPrice * 1,
-//     };
-//     dispatch(addItem(newItem));
-//   };
-
-//   return (
-//     <li className="flex gap-7 py-2">
-//       <img src={imageUrl} alt={name} className={`h-24 ${soldOut ? 'opacity-90 grayscale-80' : ''}`} />
-//       <div className="flex flex-col grow pt-0.5">
-//         <p className="font-medium ">{name}</p>
-//         {/* <p className="text-sm italic text-stone-500 capitalize">{ingredients.join(", ")}</p> */}
-//         <div className="flex flex-wrap gap-1 text-sm text-gray-600">
-//           {ingredients.map((ing, i) => (
-//             <span key={i} className="bg-stone-100 px-1.5 py-0.5 rounded">
-//               {ing}
-//             </span>
-//           ))}
-//         </div>
-
-//         <div className="mt-auto flex items-center justify-between">
-//           {!soldOut ? <p className="text-sm">{formatCurrency(unitPrice)}</p> : <p className="text-sm text-yellow-500 uppercase font-medium">Sold out</p>}
-//           <div className="flex items-center space-x-3">
-//             {currentItem && (
-//               <UpdateItemQuantity pizza={currentItem} />
-//             )}
-//             {!soldOut && <Button type='small' onClick={handleAddToCart} disabled={currentItem} className="transition-all duration-300 ease-in-out hover:scale-105 hover:brightness-110"
-//             > Add To cart </Button>
-//             }
-//           </div>
-//         </div>
-//       </div>
-//     </li>
-//   );
-// }
-
-// export default MenuItem;
+// react memo for perofrmance optimization  where when user is in cart
+// and then delete or change quanitty in car and then go back to menu
+// then in menu we show the update  so normally whole menu re render 
+// but using memo it check for each menu item whether it has props changed or a
+//any change so it rerender only those menu item instaces that ar chnged
+// so creating a performacne optimization
+import React from "react";
 import { formatCurrency } from "../../utilities/helpers";
 import Button from "../../ui/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, getCart } from "../cart/cartSlice";
+import { addItem, selectCartItemById } from "../cart/cartSlice";
 import UpdateItemQuantity from "../cart/UPdateItemQuantity";
 
 function MenuItem({ pizza, className }) {
   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
-  const cart = useSelector(getCart);
-  const currentItem = cart.find((item) => item.pizzaId === id);
+  const currentItem = useSelector(selectCartItemById(id));
+
   const dispatch = useDispatch();
 
   function handleAddToCart() {
@@ -119,5 +71,12 @@ function MenuItem({ pizza, className }) {
     </li>
   );
 }
+function areEqual(prevProps, nextProps) {
+  return (
+    prevProps.pizza.id === nextProps.pizza.id &&
+    prevProps.pizza.name === nextProps.pizza.name &&
+    prevProps.className === nextProps.className
+  );
+}
 
-export default MenuItem;
+export default React.memo(MenuItem, areEqual);
