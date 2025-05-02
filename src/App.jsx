@@ -22,7 +22,11 @@ const router = createBrowserRouter([
   },
 ]);
 function App() {
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={router} future={{
+    v7_startTransition: true,
+    v7_relativeSplatPath: true,
+  }}
+  />;
 }
 
 export default App;

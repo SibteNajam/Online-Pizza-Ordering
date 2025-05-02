@@ -22,7 +22,7 @@ function Menu() {
 
 export async function loader() {
   const menu = await getMenu();
-  return menu;
+  return menu ?? []; //t return something
 }
 
 export default Menu;
