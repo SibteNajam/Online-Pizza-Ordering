@@ -1,6 +1,5 @@
 
 import supabase from "../../SupabaseClient";
-;
 // const API_URL = "https://react-fast-pizza-api.jonas.io/api";
 // const API_URL_LH = "http://localhost:3000";
 const API_URL_SB = "https://kxfvcrhjbjavzcapwwve.supabase.co/rest/v1";
@@ -23,31 +22,30 @@ export async function getMenu() {
   return data;
 }
 export async function getOrder(id) {
-  const res = await fetch(`${API_URL_SB}/order/${id}`);
-  if (!res.ok) throw Error(`Couldn't find order #${id}`);
-  const { data } = await res.json();
-  return data;
+  const res = await fetch(`${API_URL_SB}/Order?id=eq.${id}`, {
+    headers: {
+      apikey: API_KEY_SB,
+      Authorization: `Bearer ${API_KEY_SB}`,
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Couldn't find order #${id}`);
+  }
+
+  const data = await res.json();
+
+  // Supabase returns an array even for single row queries
+  if (data.length === 0) {
+    throw new Error(`Order #${id} not found`);
+  }
+
+  return data[0]; // Return the first order (it should be the correct one)
 }
 
-// export async function createOrder(newOrder) {
-//   try {
-//     const res = await fetch(`${API_URL_SB}/order`, {
-//       method: "POST",
-//       body: JSON.stringify(newOrder),
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     });
-
-//     if (!res.ok) throw Error();
-//     const { data } = await res.json();
-//     return data;
-//   } catch {
-//     throw Error("Failed creating your order");
-//   }
-// }
 export async function createOrder(newOrder) {
-  console.log("fafafafchekingorder", newOrder);
   try {
     const res = await fetch(`${API_URL_SB}/Order`, {
       method: "POST",
@@ -56,6 +54,7 @@ export async function createOrder(newOrder) {
         "Content-Type": "application/json",
         apikey: API_KEY_SB,
         Authorization: `Bearer ${API_KEY_SB}`,
+        Prefer: "return=representation",
       },
     });
 
@@ -66,7 +65,7 @@ export async function createOrder(newOrder) {
     }
 
     const data = await res.json();
-    return data;
+    return data[0]; // Supabase returns array of inserted rows
   } catch (err) {
     throw new Error("Failed creating your order");
   }

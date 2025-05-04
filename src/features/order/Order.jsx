@@ -1,46 +1,12 @@
-// Test ID: IIDSAT
+
 
 import { useLoaderData } from "react-router-dom";
+import { motion } from "framer-motion";
 import { getOrder } from "../../services/apiRestaurant";
 import { formatCurrency, formatDate, calcMinutesLeft } from "../../utilities/helpers";
 import OrderItem from "./OrderItem";
-// const order = {
-//   id: "ABCDEF",
-//   customer: "Jonas",
-//   phone: "123456789",
-//   address: "Arroios, Lisbon , Portugal",
-//   priority: true,
-//   estimatedDelivery: "2027-04-25T10:00:00",
-//   cart: [
-//     {
-//       pizzaId: 7,
-//       name: "Napoli",
-//       quantity: 3,
-//       unitPrice: 16,
-//       totalPrice: 48,
-//     },
-//     {
-//       pizzaId: 5,
-//       name: "Diavola",
-//       quantity: 2,
-//       unitPrice: 16,
-//       totalPrice: 32,
-//     },
-//     {
-//       pizzaId: 3,
-//       name: "Romana",
-//       quantity: 1,
-//       unitPrice: 15,
-//       totalPrice: 15,
-//     },
-//   ],
-//   position: "-9.000,38.000",
-//   orderPrice: 95,
-//   priorityPrice: 19,
-// };
 
 function Order() {
-  // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
   const order = useLoaderData();
   const {
     id,
@@ -52,41 +18,139 @@ function Order() {
     cart,
   } = order;
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
-  console.log(id, cart);
+
   return (
-    <div className="py-6 px-4 flex flex-col gap-4">
-      <div className="flex items-center justify-between flex-wrap gap-2">
-        <h2 className="texr-xl font-semibold"> Order # {id} Status</h2>
-
-        <div className="space-x-2">
-          {priority && <span className="bg-red-500 rounded-full py-1 px-3 text-sm uppercase font-semibold text-red-100 tracking-wide">Priority</span>}
-          <span className="bg-green-500 rounded-full py-1 px-3 text-sm uppercase font-semibold text-green-100 tracking-wide" >{status} order</span>
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="max-w-4xl mx-auto py-10 px-4 sm:px-6 lg:px-8"
+    >
+      <div className="bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-100">
+        {/* Header Section */}
+        <div className="bg-yellow-400 p-6 sm:p-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <motion.h2
+              initial={{ x: -30 }}
+              animate={{ x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-3xl font-extrabold text-gray-900"
+            >
+              Order #{id}
+            </motion.h2>
+            <div className="flex gap-3">
+              {priority && (
+                <motion.span
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="bg-red-500 rounded-full py-2 px-4 text-sm font-bold text-white uppercase tracking-wider shadow-sm"
+                >
+                  Priority
+                </motion.span>
+              )}
+              <motion.span
+                initial={{ scale: 0.8 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.4 }}
+                className="bg-yellow-600 rounded-full py-2 px-4 text-sm font-bold text-white uppercase tracking-wider shadow-sm"
+              >
+                {status}
+              </motion.span>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div className="flex items-center justify-between flex-wrap bg-stone-200 px-6 py-5 gap-2 ">
-        <p className="font-medium">
-          {deliveryIn >= 0
-            ? `Only ${calcMinutesLeft(estimatedDelivery)} minutes left 😃`
-            : "Order should have arrived"}
-        </p>
-        <p className="text-xs text-stone-500">(Estimated delivery: {formatDate(estimatedDelivery)})</p>
+        {/* Delivery Status */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="p-6 sm:p-8 bg-gray-50"
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <p className="text-xl font-semibold text-gray-800">
+              {deliveryIn >= 0
+                ? `Arriving in ${deliveryIn} minutes! 🎉`
+                : "Your order should be with you! 📦"}
+            </p>
+            <p className="text-sm text-gray-500 font-medium">
+              Estimated Delivery: {formatDate(estimatedDelivery)}
+            </p>
+          </div>
+          {/* Progress Bar */}
+          {deliveryIn >= 0 && (
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: "100%" }}
+              transition={{ duration: 1.2, delay: 0.6 }}
+              className="mt-6"
+            >
+              <div className="w-full bg-gray-200 rounded-full h-3">
+                <div
+                  className="bg-yellow-400 h-3 rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min((60 - deliveryIn) / 60 * 100, 100)}%` }}
+                ></div>
+              </div>
+              <p className="text-sm text-gray-600 mt-2 text-center">
+                Delivery Progress: {Math.round((60 - deliveryIn) / 60 * 100)}%
+              </p>
+            </motion.div>
+          )}
+        </motion.div>
+
+        {/* Order Items */}
+        <ul className="divide-y divide-gray-100">
+          {cart.map((item) => (
+            <motion.li
+              key={item.pizzaId}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 * (item.pizzaId % 5) }}
+              className="hover:bg-gray-50 transition-colors duration-200"
+            >
+              <OrderItem item={item} />
+            </motion.li>
+          ))}
+        </ul>
+
+        {/* Pricing Summary */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="p-6 sm:p-8 bg-gray-50 border-t border-gray-100"
+        >
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <p className="text-base font-medium text-gray-600">Order Price:</p>
+              <p className="text-base font-semibold text-gray-800">{formatCurrency(orderPrice)}</p>
+            </div>
+            {priority && (
+              <div className="flex justify-between items-center">
+                <p className="text-base font-medium text-gray-600">Priority Fee:</p>
+                <p className="text-base font-semibold text-gray-800">{formatCurrency(priorityPrice)}</p>
+              </div>
+            )}
+            <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+              <p className="text-lg font-bold text-gray-900">To Pay on Delivery:</p>
+              <p className="text-lg font-bold text-yellow-600">{formatCurrency(orderPrice + priorityPrice)}</p>
+            </div>
+          </div>
+        </motion.div>
       </div>
-      <ul className="divide-y divide-stone-200 border-b border-t">
-        {cart.map((item) => (<OrderItem item={item} key={item.pizzaId} />))}
-      </ul>
-      <div className="space-y-2 bg-stone-200 py-5 px-6">
-        <p className="text-sm font-medium text-stone-600">Price pizza: {formatCurrency(orderPrice)}</p>
-        {priority && <p className="text-sm font-medium text-stone-600">Price priority: {formatCurrency(priorityPrice)}</p>}
-        <p className="font-bold">To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}</p>
-      </div>
-    </div>
+    </motion.div>
   );
 }
+
 export async function loader({ params }) {
   const order = await getOrder(params.orderID);
-  console.log("sasasas", order);
   return order;
 }
 
 export default Order;
+
+
+
+
+

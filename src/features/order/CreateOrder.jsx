@@ -14,6 +14,7 @@ const isValidPhone = (str) =>
     str
   );
 console.log(isValidPhone);
+
 function CreateOrder() {
   const dispatch = useDispatch();
   const username = useSelector(state => state.user.username);
@@ -27,7 +28,7 @@ function CreateOrder() {
   // fetching cart from redux using use selector
 
   const cart = useSelector(getCart);
-  console.log(cart);
+  // console.log(cart);
   if (!cart.length) return <EmptyCart />
 
   return (
@@ -73,11 +74,10 @@ function CreateOrder() {
           />
           <label htmlFor="priority">Want to yo give your order priority?</label>
         </div>
-
         <div>
           {/* here i add cart as an input or as form elemenet but its not on ui for now thats why its hidden */}
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <Button type='primary' cdisabled={isSubmitting}>
+          <Button type='primary' disabled={isSubmitting}>
             {isSubmitting ? "Placing Order..." : "Order Now"}
           </Button>
         </div>
@@ -115,8 +115,6 @@ export async function action({ request }) {
   store.dispatch(clearCart());
   // console.log("neworder", newOrder);
   return redirect(`/order/${newOrder.id}`);
-
-
 }
 
 export default CreateOrder;
