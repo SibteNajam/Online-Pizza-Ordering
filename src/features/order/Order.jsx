@@ -18,6 +18,7 @@ function Order() {
     cart,
   } = order;
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
+  const totalCartPrice = cart.reduce((sum, item) => sum + item.totalPrice, 0);
 
   return (
     <motion.div
@@ -124,7 +125,7 @@ function Order() {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <p className="text-base font-medium text-gray-600">Order Price:</p>
-              <p className="text-base font-semibold text-gray-800">{formatCurrency(orderPrice)}</p>
+              <p className="text-base font-semibold text-gray-800">{formatCurrency(totalCartPrice)}</p>
             </div>
             {priority && (
               <div className="flex justify-between items-center">

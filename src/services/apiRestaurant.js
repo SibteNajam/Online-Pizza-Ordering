@@ -45,31 +45,57 @@ export async function getOrder(id) {
   return data[0]; // Return the first order (it should be the correct one)
 }
 
+// export async function createOrder(newOrder) {
+//   try {
+//     const res = await fetch(`${API_URL_SB}/Order`, {
+//       method: "POST",
+//       body: JSON.stringify(newOrder),
+//       headers: {
+//         "Content-Type": "application/json",
+//         apikey: API_KEY_SB,
+//         Authorization: `Bearer ${API_KEY_SB}`,
+//         Prefer: "return=representation",
+//       },
+//     });
+
+//     if (!res.ok) {
+//       const errorText = await res.text();
+//       console.error("Supabase Error:", errorText);
+//       throw new Error("Failed creating your order");
+//     }
+
+//     const data = await res.json();
+//     return data[0]; // Supabase returns array of inserted rows
+//   } catch (err) {
+//     throw new Error("Failed creating your order");
+//   }
+// }
+
+
 export async function createOrder(newOrder) {
   try {
-    const res = await fetch(`${API_URL_SB}/Order`, {
+    const res = await fetch("http://localhost:3000/orders", {
       method: "POST",
       body: JSON.stringify(newOrder),
       headers: {
         "Content-Type": "application/json",
-        apikey: API_KEY_SB,
-        Authorization: `Bearer ${API_KEY_SB}`,
-        Prefer: "return=representation",
       },
     });
 
     if (!res.ok) {
       const errorText = await res.text();
-      console.error("Supabase Error:", errorText);
+      console.error("Order Creation Error:", errorText);
       throw new Error("Failed creating your order");
     }
 
     const data = await res.json();
-    return data[0]; // Supabase returns array of inserted rows
+    return data; // Return the order data
   } catch (err) {
+    console.error("Order Creation Error:", err);
     throw new Error("Failed creating your order");
   }
 }
+
 
 
 export async function updateOrder(id, updateObj) {

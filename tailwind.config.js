@@ -6,13 +6,16 @@ export default {
   ],
   theme: {
     extend: {
-      fontFamily:{
-         sans: ['Roboto Mono'],
+      scale: {
+        102: "1.02",
       },
-     
-    colors:{
-      pizza:'#45fb56',
-    },
+      fontFamily: {
+        sans: ['Roboto Mono'],
+      },
+
+      colors: {
+        pizza: '#45fb56',
+      },
     },
   },
   plugins: [],

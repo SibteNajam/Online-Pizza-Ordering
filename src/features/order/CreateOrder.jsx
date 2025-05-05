@@ -8,6 +8,7 @@ import { createOrder } from "../../services/apiRestaurant";
 import store from "../../store";
 import { useDispatch } from "react-redux";
 import { fetchAddress } from "../user/userSlice";
+
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
@@ -24,7 +25,8 @@ function CreateOrder() {
 
   // return some errors so mostly used this hook
   const formError = useActionData();
-
+  const position = useSelector((state) => state.user.position);
+  console.log("positioncocosle", position);
   // fetching cart from redux using use selector
 
   const cart = useSelector(getCart);
@@ -32,57 +34,165 @@ function CreateOrder() {
   if (!cart.length) return <EmptyCart />
 
   return (
-    <div className="px-4 py-6">
-      <h2 className="text-xl font-semibold mb-8">{"Ready to order? Let's go!"}</h2>
-      <button onClick={() => dispatch(fetchAddress())}>Get Position</button>
-      {/* <Form method="POST" action="/order/add "> */}
-      <Form method="POST">
-        <div className="mb-3 flex gap-2 flex-col sm:flex-row sm:items-center">
-          <label className="sm:basis-40">First Name</label>
-          <input className="input grow" type="text" name="customer" placeholder="Enter your name" defaultValue={username} required />
-        </div>
+    // <div className="px-4 py-6">
+    //   <h2 className="text-xl font-semibold mb-8">{"Ready to order? Let's go!"}</h2>
+    //   <button onClick={() => dispatch(fetchAddress())}>Get Position</button>
+    //   {/* <Form method="POST" action="/order/add "> */}
+    //   <Form method="POST">
+    //     <div className="mb-3 flex gap-2 flex-col sm:flex-row sm:items-center">
+    //       <label className="sm:basis-40">First Name</label>
+    //       <input className="input grow" type="text" name="customer" placeholder="Enter your name" defaultValue={username} required />
+    //     </div>
 
-        <div className="mb-3 flex gap-2 flex-col sm:flex-row sm:items-start">
-          <label className="sm:basis-40">Phone number</label>
-          <div className="grow">
-            <input className="input w-full" type="tel" name="phone" placeholder="Enter your Phone NUmber" required />
-            {formError?.phone && <p className="text-xs mt-2 text-yellow-600 bg-yellow-100 p-2 rounded-[7px]">{formError.phone}</p>}
-          </div>
-        </div>
+    //     <div className="mb-3 flex gap-2 flex-col sm:flex-row sm:items-start">
+    //       <label className="sm:basis-40">Phone number</label>
+    //       <div className="grow">
+    //         <input className="input w-full" type="tel" name="phone" placeholder="Enter your Phone NUmber" required />
+    //         {formError?.phone && <p className="text-xs mt-2 text-yellow-600 bg-yellow-100 p-2 rounded-[7px]">{formError.phone}</p>}
+    //       </div>
+    //     </div>
 
-        <div className="mb-3 flex gap-2 flex-col sm:flex-row sm:items-center">
-          <label className="block text-gray-700 sm:basis-40">Address</label>
-          <div className="grow">
+    //     <div className="mb-3 flex gap-2 flex-col sm:flex-row sm:items-center">
+    //       <label className="block text-gray-700 sm:basis-40">Address</label>
+    //       <div className="grow">
+    //         <input
+    //           placeholder="Enter your Address"
+    //           className="input w-full"
+    //           type="text"
+    //           name="address"
+    //           required
+    //         />
+    //       </div>
+    //     </div>
+
+    //     <div className="mb-12 flex gap-5 items-center justify-end">
+    //       <input
+    //         className="h-6 w-6 accent-yellow-300 focus:outline-none focus:ring focus:ring-yellow-400 focus:ring-offset-2"
+    //         type="checkbox"
+    //         name="priority"
+    //         id="priority"
+    //         value={withPriority}
+    //         onChange={(e) => setWithPriority(e.target.checked)}
+    //       />
+    //       <label htmlFor="priority">Want to yo give your order priority?</label>
+    //     </div>
+    //     <div>
+    //       {/* here i add cart as an input or as form elemenet but its not on ui for now thats why its hidden */}
+    //       <input type="hidden" name="cart" value={JSON.stringify(cart)} />
+    //       <Button type='primary' disabled={isSubmitting}>
+    //         {isSubmitting ? "Placing Order..." : "Order Now"}
+    //       </Button>
+    //     </div>
+    //   </Form>
+    // </div>
+    <div className="min-h-screen p-4 relative">
+      {/* Top gradient border */}
+
+
+      <div
+        className="max-w-2xl mx-auto bg-white/20 border border-white/50 rounded-xl p-6 shadow-lg backdrop-blur-md animate-fade-in relative z-20"
+        style={{ backdropFilter: "blur(8px)" }}
+      >
+        <span className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full z-10" />
+
+        {/* Bottom gradient border */}
+        <span className="absolute left-0 right-0 bottom-0 h-1 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full z-10" />
+        <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-8 text-center relative">
+          Ready to order? Lets go! 🍕
+        </h2>
+
+        <button
+          onClick={() => dispatch(fetchAddress())}
+          className="mb-6 bg-yellow-500 text-gray-900 font-semibold px-4 py-2 rounded-lg hover:bg-yellow-600 hover:scale-105 transition-all animate-pulse cursor-Pointer"
+        >
+          Get Position
+        </button>
+
+        <Form method="POST" className="space-y-6">
+          {/* First Name */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 animate-slide-up" style={{ animationDelay: "0.1s" }}>
+            <label className="sm:basis-40 text-gray-800 font-medium">First Name</label>
             <input
-              placeholder="Enter your Address"
-              className="input w-full"
+              className="grow px-4 py-2 bg-white/10 border border-gray-300/50 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-all"
               type="text"
-              name="address"
+              name="customer"
+              placeholder="Enter your name"
+              defaultValue={username}
               required
             />
           </div>
-        </div>
 
-        <div className="mb-12 flex gap-5 items-center justify-end">
+          {/* Phone Number */}
+          <div className="flex flex-col sm:flex-row sm:items-start gap-4 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+            <label className="sm:basis-40 text-gray-800 font-medium">Phone number</label>
+            <div className="grow">
+              <input
+                className="w-full px-4 py-2 bg-white/10 border border-gray-300/50 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-all"
+                type="tel"
+                name="phone"
+                placeholder="Enter your Phone Number"
+                required
+              />
+              {formError?.phone && (
+                <p className="text-xs mt-2 text-yellow-600 bg-yellow-100/20 border border-yellow-500/50 p-2 rounded-lg">
+                  {formError.phone}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Address */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 animate-slide-up" style={{ animationDelay: "0.3s" }}>
+            <label className="sm:basis-40 text-gray-800 font-medium">Address</label>
+            <div className="grow">
+              <input
+                className="w-full px-4 py-2 bg-white/10 border border-gray-300/50 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-all"
+                type="text"
+                name="address"
+                placeholder="Enter your Address"
+                required
+                defaultValue={position}
+              />
+            </div>
+          </div>
+
+          {/* Priority Checkbox */}
+          <div className="flex items-center justify-end gap-4 animate-slide-up" style={{ animationDelay: "0.4s" }}>
+            <input
+              className="h-6 w-6 accent-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-offset-2 rounded-md animate-pulse"
+              type="checkbox"
+              name="priority"
+              id="priority"
+              value={withPriority}
+              onChange={(e) => setWithPriority(e.target.checked)}
+            />
+            <label htmlFor="priority" className="text-gray-800 font-medium hover:text-yellow-500 transition-colors">
+              Want to give your order priority?
+            </label>
+          </div>
+
+          {/* Submit Button */}
+          <div className="text-right animate-slide-up" style={{ animationDelay: "0.5s" }}>
+            <input type="hidden" name="cart" value={JSON.stringify(cart)} />
+            <Button
+              type="primary"
+              disabled={isSubmitting}
+              className="bg-gradient-to-r from-yellow-500 to-orange-500 text-gray-900 font-semibold px-6 py-2 rounded-lg hover:scale-105 hover:shadow-lg transition-all animate-bounce"
+            >
+              {isSubmitting ? "Placing Order..." : "Order Now"}
+            </Button>
+          </div>
           <input
-            className="h-6 w-6 accent-yellow-300 focus:outline-none focus:ring focus:ring-yellow-400 focus:ring-offset-2"
-            type="checkbox"
-            name="priority"
-            id="priority"
-            value={withPriority}
-            onChange={(e) => setWithPriority(e.target.checked)}
+            type="hidden"
+            name="position"
+            value={`${position.latitude}, ${position.longitude}`}
           />
-          <label htmlFor="priority">Want to yo give your order priority?</label>
-        </div>
-        <div>
-          {/* here i add cart as an input or as form elemenet but its not on ui for now thats why its hidden */}
-          <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <Button type='primary' disabled={isSubmitting}>
-            {isSubmitting ? "Placing Order..." : "Order Now"}
-          </Button>
-        </div>
-      </Form>
+
+
+        </Form>
+      </div>
     </div>
+
   );
 }
 // to connect thsi action function we modify where we we define routes
@@ -95,6 +205,7 @@ export async function action({ request }) {
     ...data,
     cart: JSON.parse(data.cart),
     priority: data.priority === "on",
+    position: data.position,
   };
   console.log("order", order);
   const errors = {};
@@ -102,7 +213,7 @@ export async function action({ request }) {
     errors.phone =
       "Please give correct phone nnumber.We might need to conatct you";
   if (Object.keys(errors).length > 0) return errors;
-
+  console.log("total order check", order);
   // now we  can pass this data to api end point
   const newOrder = await createOrder(order);
   // after creting order we want use to move to URL /order/id to show order but we

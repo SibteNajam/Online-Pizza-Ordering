@@ -33,7 +33,7 @@ export function formatCurrency(value) {
   // Ensure the value is a number
   value = parseFloat(value);
 
-  if (isNaN(value)) return "€0.00"; // Return €0.00 if value is not a valid number
+  if (isNaN(value)) return "RS"; // Return €0.00 if value is not a valid number
 
   // Manually format to currency with thousands separator
   const parts = value.toFixed(2).split(".");
@@ -43,13 +43,13 @@ export function formatCurrency(value) {
   // Add thousands separator
   integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  return `€${integerPart}.${decimalPart}`;
+  return `RS-${integerPart}.${decimalPart}`;
 }
 
 // Format date without Intl
 export function formatDate(dateStr) {
   const date = new Date(dateStr);
-  
+
   // Ensure it's a valid date
   if (isNaN(date.getTime())) return "Invalid Date";
 
