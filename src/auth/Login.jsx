@@ -64,7 +64,14 @@ const Login = () => {
         const password = e.target.password.value;
         console.log({ email, password });
     };
-
+    const signUpWithGoogle = async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+        });
+        if (error) {
+            console.error('Google sign-in error:', error.message);
+        }
+    }
     return (
         <div className="login-page-container relative flex items-center justify-center min-h-screen p-4 overflow-hidden">
             {/* Background only for login page */}
@@ -76,6 +83,7 @@ const Login = () => {
                         <h1 className="text-4xl font-extrabold text-gray-900 drop-shadow-lg">Pizza Paradise</h1>
                         <p className="text-gray-800 text-lg mt-2">Login to savor your pizza!</p>
                     </div>
+
 
                     <form className="space-y-6" onSubmit={handleSubmit}>
                         <div>
@@ -105,6 +113,7 @@ const Login = () => {
                         <button
                             onClick={signUp}
                             className="w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-100 flex items-center justify-center space-x-4 shadow-md transition-all"
+                            type='button'
                         >
                             <FaGoogle size={24} className="text-blue-600" /> {/* Google logo */}
                             <span className="font-semibold text-base">Sign in with Google</span>

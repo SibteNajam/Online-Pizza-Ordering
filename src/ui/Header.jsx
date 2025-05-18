@@ -1,5 +1,5 @@
 
-
+import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "../../SupabaseClient";
@@ -8,6 +8,21 @@ import SearchOrder from "../features/order/SearchOrder";
 import Username from "../features/user/Username";
 
 function Header() {
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const getUserId = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (user) {
+        console.log("useridcheck in header", user.id);
+        setUserId(user.id);
+      } else {
+        console.log("No user found or not logged in", error);
+      }
+    };
+
+    getUserId();
+  }, []);
   const navigate = useNavigate();
 
   const signOut = async () => {

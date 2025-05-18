@@ -110,7 +110,10 @@ function Order() {
               transition={{ delay: 0.2 * (item.pizzaId % 5) }}
               className="hover:bg-gray-50 transition-colors duration-200"
             >
-              <OrderItem item={item} />
+              <OrderItem
+                item={item}
+              // or however you manage this
+              />
             </motion.li>
           ))}
         </ul>

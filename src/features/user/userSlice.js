@@ -3,7 +3,10 @@ import { getAddress } from '../../services/apiGeocoding';
 
 function getPosition() {
   return new Promise(function (resolve, reject) {
-    navigator.geolocation.getCurrentPosition(resolve, reject);
+    navigator.geolocation.getCurrentPosition(resolve, reject, {
+      enableHighAccuracy: true,  // ✅ Use this!
+      timeout: 10000,
+    });
   });
 }
 
@@ -55,7 +58,7 @@ const userSlice = createSlice({
     }
   },
   extraReducers: (builder) => builder.addCase(
-    fetchAddress.pending, (state, action) => { state.status = 'loading' })
+    fetchAddress.pending, (state) => { state.status = 'loading' })
     .addCase(fetchAddress.fulfilled, (state, action) => {
       state.status = 'idle';
       state.position = action.payload.position;
