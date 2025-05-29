@@ -37,7 +37,7 @@ const Login = () => {
             navigate('/');
         }
     }, [session, navigate]);
-    // Set background image only on login mount
+    // Set background image only  login mount
     useEffect(() => {
         const bgDiv = document.querySelector('.pizza-bg');
         const primaryUrl = 'https://pngimg.com/uploads/pizza/pizza_PNG44010.png';
